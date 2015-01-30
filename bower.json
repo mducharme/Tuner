@@ -1,0 +1,28 @@
+{
+  "name": "Tuner",
+  "version": "0.0.1",
+  "authors": [
+    "Mathieu Ducharme <mat@locomotive.ca>"
+  ],
+  "description": "Guitar Tuner using Web Audio",
+  "main": "scripts/tuner.js",
+  "keywords": [
+    "tuner",
+    "web",
+    "audio",
+    "guitar"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "qunit": "~1.16.0"
+  }
+}

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Tuner</title>
+
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="scripts/tuner.js"></script>
+	<script>
+
+	window.addEventListener('load', init_tuner, false);
+
+	var tuner;
+	function init_tuner() 
+	{
+		tuner = new Tuner({});
+	}
+
+	</script>
+</head>
+
+<body>
+
+	<div class="tuner tuner-ui-debug">
+
+		<h2>Tuner Settings</h2>
+		<table>
+			<tbody>
+				<tr>
+					<td><strong>Base Frequency</strong></td>
+					<td class="tuner-data base-frequency">--</td>
+				</tr>
+				<tr>
+					<td><strong>Instrument</strong></td>
+					<td class="tuner-data instrument">--</td>
+				</tr>
+				<tr>
+					<td><strong>Tuning</strong></td>
+					<td class="tuner-data tuning">--</td>
+				</tr>
+				<tr>
+					<td><strong>Tuning information</strong></td>
+					<td class="tuner-data tuning-info">--</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h2>Frequency Information</h2>
+		<table>
+			<tbody>
+				<tr>
+					<td><strong>Frequency (Hz)</strong></td>
+					<td class="tuner-data frequency">--</td>
+				</tr>
+				<tr>
+					<td><strong>Note Index</strong></td>
+					<td class="tuner-data note-index">--</td>
+				</tr>
+				<tr>
+					<td><strong>Note</strong></td>
+					<td class="tuner-data note">--</td>
+				</tr>
+				<tr>
+					<td><strong>Octave</strong></td>
+					<td class="tuner-data octave">--</td>
+				</tr>
+				<tr>
+					<td><strong>Delta (Hz)</strong></td>
+					<td class="tuner-data diff">--</td>
+				</tr>
+				<tr>
+					<td><strong>Delta (%)</strong></td>
+					<td class="tuner-data diff_cents">--</td>
+				</tr>
+
+			</tbody>
+		</table>
+
+		<h2>Tuner Widgets</h2>
+		<table>
+			<tbody>
+				<tr>
+					<td>
+
+			</tbody>
+		</table>
+
+		<h2>Signal Information</h2>
+		<table>
+			<tbody>
+				<tr>
+					<td><strong>Gain (dB)</strong></td>
+					<td class="tuner-data gain">--</td>
+				</tr>
+				<tr>
+					<td><strong>Waveform</strong></td>
+					<td><canvas id="waveform" width="480" height="160"></canvas></td>
+				</tr>
+				<tr>
+					<td><strong>Bar-Graph</strong></td>
+					<td><canvas id="bargraph" width="480" height="160"></canvas></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+</body>
+
+</html>

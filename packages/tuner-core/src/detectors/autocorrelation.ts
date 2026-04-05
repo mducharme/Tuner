@@ -8,16 +8,19 @@ export class AutocorrelationDetector implements PitchDetector {
   private readonly minFrequency: number
   private readonly maxFrequency: number
   private readonly clarityThreshold: number
+  private readonly rmsThreshold: number
 
   constructor({
     minFrequency = 60, // ~B1, covers bass guitar low B
     maxFrequency = 1400, // covers most instruments
     // Mic + room noise yields much lower "clarity" than synthetic sines; 0.9 rejected almost all real input.
     clarityThreshold = 0.2,
+    rmsThreshold = 0.01,
   } = {}) {
     this.minFrequency = minFrequency
     this.maxFrequency = maxFrequency
     this.clarityThreshold = clarityThreshold
+    this.rmsThreshold = rmsThreshold
   }
 
   detect(samples: Float32Array, sampleRate: number): PitchDetection {
@@ -33,7 +36,7 @@ export class AutocorrelationDetector implements PitchDetector {
       rms += (samples[i] ?? 0) * (samples[i] ?? 0)
     }
     rms = Math.sqrt(rms / n)
-    if (rms < 0.01) {
+    if (rms < this.rmsThreshold) {
       return { frequency: null, confidence: 0 }
     }
 

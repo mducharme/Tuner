@@ -7,7 +7,11 @@ import { YinDetector } from './yin.js'
 
 export function createPitchDetector(settings: TunerSettings): PitchDetector {
   const d = settings.detector
-  const bounds = { minFrequency: d.minFrequency, maxFrequency: d.maxFrequency }
+  const bounds = {
+    minFrequency: d.minFrequency,
+    maxFrequency: d.maxFrequency,
+    rmsThreshold: d.rmsThreshold,
+  }
 
   if (settings.pitchDetector === 'autocorrelation') {
     return new AutocorrelationDetector({

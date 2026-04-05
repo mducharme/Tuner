@@ -1,6 +1,6 @@
 {
   "name": "tuner-core",
-  "version": "2026.4.1",
+  "version": "2026.4.2",
   "description": "Pitch detection (YIN, pYIN, MPM, autocorrelation) and tuner session types for instrument apps — ESM-only, Node 20+.",
   "license": "MIT",
   "type": "module",

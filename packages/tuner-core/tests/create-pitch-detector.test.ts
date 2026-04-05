@@ -5,6 +5,7 @@ import { MpmDetector } from '../src/detectors/mpm.js'
 import { PyinDetector } from '../src/detectors/pyin.js'
 import { YinDetector } from '../src/detectors/yin.js'
 import { mergeTunerSettings } from '../src/tuner-settings.js'
+import { generateSine } from './test-utils.js'
 
 describe('createPitchDetector', () => {
   it('returns YinDetector by default', () => {
@@ -33,4 +34,26 @@ describe('createPitchDetector', () => {
     const d = createPitchDetector(mergeTunerSettings({ pitchDetector: 'mpm' }))
     expect(d).toBeInstanceOf(MpmDetector)
   })
+
+  it.each(['yin', 'mpm', 'autocorrelation', 'pyin'] as const)(
+    '%s: rmsThreshold set high enough silences a quiet signal',
+    (kind) => {
+      const sampleRate = 44100
+      // Amplitude 0.005 → RMS ≈ 0.0035, below rmsThreshold of 0.1
+      const quietSamples = generateSine(440, sampleRate, 4096).map(
+        (v) => v * 0.005,
+      ) as unknown as Float32Array
+      const detector = createPitchDetector(
+        mergeTunerSettings({
+          pitchDetector: kind,
+          detector: { rmsThreshold: 0.1 },
+        }),
+      )
+      const { frequency } = detector.detect(
+        new Float32Array(quietSamples),
+        sampleRate,
+      )
+      expect(frequency).toBeNull()
+    },
+  )
 })

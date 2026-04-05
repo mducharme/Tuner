@@ -37,6 +37,8 @@ export interface DetectorSettings {
   yinThreshold: number
   /** MPM: minimum NSDF peak height before accepting a period (typ. 0.85–0.95) */
   mpmPeakThreshold: number
+  /** RMS silence gate applied by all detectors before analysis (typ. 0.005–0.05) */
+  rmsThreshold: number
   pyin: PyinHMMSettings
 }
 
@@ -79,6 +81,7 @@ export const DEFAULT_TUNER_SETTINGS: TunerSettings = {
     clarityThreshold: 0.2,
     yinThreshold: 0.15,
     mpmPeakThreshold: 0.88,
+    rmsThreshold: 0.01,
     pyin: { ...DEFAULT_PYIN_HMM },
   },
 }

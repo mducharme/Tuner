@@ -14,6 +14,14 @@ describe('mergeTunerSettings', () => {
     )
   })
 
+  it('overrides rmsThreshold', () => {
+    const s = mergeTunerSettings({ detector: { rmsThreshold: 0.05 } })
+    expect(s.detector.rmsThreshold).toBe(0.05)
+    expect(s.detector.minFrequency).toBe(
+      DEFAULT_TUNER_SETTINGS.detector.minFrequency,
+    )
+  })
+
   it('overrides top-level and deep-merges detector.pyin', () => {
     const s = mergeTunerSettings({
       pitchDetector: 'mpm',

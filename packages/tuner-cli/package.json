@@ -1,6 +1,6 @@
 {
   "name": "tuner-cli",
-  "version": "0.1.0",
+  "version": "2026.4.1",
   "description": "Terminal chromatic instrument tuner (Node.js CLI) using tuner-core and decibri / PortAudio for microphone capture.",
   "license": "MIT",
   "type": "module",

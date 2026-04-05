@@ -1,0 +1,60 @@
+{
+  "name": "tuner-cli",
+  "version": "0.1.0",
+  "description": "Terminal chromatic instrument tuner (Node.js CLI) using tuner-core and decibri / PortAudio for microphone capture.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "tuner": "./dist/index.js"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "keywords": [
+    "tuner",
+    "cli",
+    "chromatic",
+    "pitch",
+    "audio",
+    "terminal",
+    "microphone",
+    "decibri",
+    "portaudio",
+    "guitar"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mducharme/Tuner.git",
+    "directory": "packages/tuner-cli"
+  },
+  "bugs": {
+    "url": "https://github.com/mducharme/Tuner/issues"
+  },
+  "homepage": "https://github.com/mducharme/Tuner/tree/main/packages/tuner-cli#readme",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "dev:watch": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check ./src ./tests",
+    "package:assert": "publint --strict"
+  },
+  "dependencies": {
+    "commander": "^14.0.3",
+    "decibri": "^1.0.0",
+    "tuner-core": "workspace:*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^25.5.2",
+    "@vitest/coverage-v8": "^4.1.2",
+    "publint": "^0.3.12",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
+  }
+}

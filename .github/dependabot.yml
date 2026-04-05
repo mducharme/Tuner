@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      typescript-ecosystem:
+        patterns:
+          - "typescript"
+          - "@types/*"
+          - "vitest"
+          - "@vitest/*"
+      biome:
+        patterns:
+          - "@biomejs/biome"

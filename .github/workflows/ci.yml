@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  lint-typecheck-coverage-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit dependencies
+        run: pnpm audit --audit-level high
+
+      - name: Lint (Biome)
+        run: pnpm lint
+
+      - name: Typecheck (all packages)
+        run: pnpm typecheck
+
+      - name: Test with coverage (tuner-core)
+        run: pnpm --filter tuner-core test:coverage
+
+      - name: Test with coverage (tuner-cli)
+        run: pnpm --filter tuner-cli test:coverage
+
+      - name: Build tuner-core
+        run: pnpm --filter tuner-core build
+
+      - name: Verify npm package metadata (tuner-core)
+        run: pnpm --filter tuner-core run package:assert
+
+      - name: Build tuner-cli
+        run: pnpm --filter tuner-cli build
+
+      - name: Verify npm package metadata (tuner-cli)
+        run: pnpm --filter tuner-cli run package:assert

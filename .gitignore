@@ -1,5 +1,13 @@
-libs
-node_modules
-doc
+node_modules/
+dist/
+coverage/
 .DS_Store
+*.local
+release-notes.md
+.env
+.env.*
+!.env.example
 
+# Capacitor
+ios/
+android/

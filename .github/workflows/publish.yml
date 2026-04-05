@@ -1,0 +1,91 @@
+# One-click publish: CalVer bump, CHANGELOG, git tag + push, GitHub Release, npm.
+#
+# Setup: repo secret NPM_TOKEN (unless Trusted Publishing-only). Uses GITHUB_TOKEN to push and create releases.
+#
+# CalVer: version is YYYY.M.patch using the workflow run date (UTC). Patch increments when the
+# package’s current version is already in the same calendar month.
+
+name: Publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: Package to publish to npm
+        type: choice
+        required: true
+        options:
+          - tuner-core
+          - tuner-cli
+
+concurrency:
+  group: publish-${{ github.workflow }}-${{ github.event.inputs.package }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
+
+      - name: Prepare release (CalVer, changelog, notes)
+        id: prep
+        run: node scripts/prepare-release.mjs
+        env:
+          RELEASE_PACKAGE: ${{ inputs.package }}
+
+      - name: Install (refresh lockfile after version bump)
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Verify and build (tuner-core)
+        if: inputs.package == 'tuner-core'
+        run: |
+          pnpm --filter tuner-core test
+          pnpm --filter tuner-core build
+          pnpm --filter tuner-core run package:assert
+
+      - name: Verify and build (tuner-cli)
+        if: inputs.package == 'tuner-cli'
+        run: |
+          pnpm --filter tuner-core build
+          pnpm --filter tuner-cli build
+          pnpm --filter tuner-cli test
+          pnpm --filter tuner-cli run package:assert
+
+      - name: Commit, tag, and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add packages/${{ inputs.package }}/package.json CHANGELOG.md pnpm-lock.yaml
+          git commit -m "chore(${{ inputs.package }}): release ${{ steps.prep.outputs.version }}"
+          git push
+          git tag "${{ steps.prep.outputs.tag }}"
+          git push origin "${{ steps.prep.outputs.tag }}"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.prep.outputs.tag }}
+          name: ${{ steps.prep.outputs.release_title }}
+          body_path: release-notes.md
+
+      - name: Publish to npm
+        run: pnpm publish --filter ${{ inputs.package }} --access public --no-git-checks
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

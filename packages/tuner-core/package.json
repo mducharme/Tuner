@@ -1,0 +1,66 @@
+{
+  "name": "tuner-core",
+  "version": "0.1.0",
+  "description": "Pitch detection (YIN, pYIN, MPM, autocorrelation) and tuner session types for instrument apps — ESM-only, Node 20+.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "files": ["dist", "README.md", "LICENSE"],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "keywords": [
+    "tuner",
+    "pitch",
+    "pitch-detection",
+    "yin",
+    "pyin",
+    "mpm",
+    "autocorrelation",
+    "audio",
+    "dsp",
+    "music",
+    "guitar"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mducharme/Tuner.git",
+    "directory": "packages/tuner-core"
+  },
+  "bugs": {
+    "url": "https://github.com/mducharme/Tuner/issues"
+  },
+  "homepage": "https://github.com/mducharme/Tuner/tree/main/packages/tuner-core#readme",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run --passWithNoTests",
+    "test:coverage": "vitest run --passWithNoTests --coverage",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check ./src ./tests",
+    "package:assert": "publint --strict && attw --pack . --profile esm-only",
+    "prepublishOnly": "tsc && tsc --noEmit && publint --strict && attw --pack . --profile esm-only"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.17.4",
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^25.5.2",
+    "@vitest/coverage-v8": "^4.1.2",
+    "publint": "^0.3.12",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.2"
+  }
+}

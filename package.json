@@ -1,0 +1,29 @@
+{
+  "name": "tuner-monorepo",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "prepare": "husky",
+    "dev:cli": "pnpm --filter tuner-cli dev",
+    "tuner": "pnpm --filter tuner-cli build && pnpm --filter tuner-cli start",
+    "build": "pnpm -r --filter \"./packages/*\" run build",
+    "test": "pnpm -r --filter \"./packages/*\" run --if-present test",
+    "test:coverage": "pnpm -r --filter \"./packages/*\" run --if-present test:coverage",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "typecheck": "pnpm -r --filter \"./packages/*\" run typecheck"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "husky": "^9.1.7",
+    "typescript": "^6.0.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["esbuild", "decibri", "@biomejs/biome"]
+  }
+}

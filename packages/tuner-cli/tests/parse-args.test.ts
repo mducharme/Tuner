@@ -1,7 +1,6 @@
 import { Command } from 'commander'
-import { describe, expect, it } from 'vitest'
-import { parseArgs, parseCli, parseDeviceArg } from '../src/parse-args.js'
-
+import { assert, describe, expect, it } from 'vitest'
+import { parseCli, parseDeviceArg } from '../src/parse-args.js'
 
 const node = (args: string[]) => ['node', 'tuner', ...args]
 
@@ -127,9 +126,7 @@ describe('parseCli', () => {
       'requires an instrument id',
     )
   })
-})
 
-describe('parseCli', () => {
   it('rethrows non-Commander errors from Commander#parse', () => {
     const original = Command.prototype.parse
     Command.prototype.parse = function parse(): never {

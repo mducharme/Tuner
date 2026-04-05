@@ -2,6 +2,8 @@
 
 Chromatic **instrument tuner** in the terminal: live pitch from your microphone, needle-style cents display, and optional string hints. Built with **[tuner-core](https://www.npmjs.com/package/tuner-core)** (detectors + session) and **[decibri](https://www.npmjs.com/package/decibri)** (PortAudio capture).
 
+![A guitar tuner in your terminal](docs/cli.gif)
+
 ## Requirements
 
 - **Node.js 20+**

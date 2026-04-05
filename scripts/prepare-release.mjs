@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { execSync } from 'node:child_process'
+import { execSync, spawnSync } from 'node:child_process'
 /**
  * CalVer bump (YYYY.M.patch), CHANGELOG prepend, release notes for GitHub.
  * One run = one package (tuner-core | tuner-cli).
@@ -66,15 +66,26 @@ function lastReleaseTag() {
  * @param {string | null} tag
  */
 function commitsSince(tag) {
-  const range = tag ? `${tag}..HEAD` : null
-  const cmd = range
-    ? `git log ${range} --no-merges --pretty=format:- %s (%h)`
-    : 'git log --no-merges --pretty=format:- %s (%h)'
-  let body = execSync(cmd, {
+  /** Avoid shell: parentheses in --pretty=format must not be parsed by sh. */
+  const args = [
+    'log',
+    ...(tag ? [`${tag}..HEAD`] : []),
+    '--no-merges',
+    '--pretty=format:- %s (%h)',
+  ]
+  const result = spawnSync('git', args, {
     cwd: root,
     encoding: 'utf8',
     stdio: ['pipe', 'pipe', 'pipe'],
-  }).trim()
+  })
+  if (result.error) throw result.error
+  if (result.status !== 0) {
+    throw new Error(
+      result.stderr?.trim() ||
+        `git ${args.join(' ')} exited with ${result.status}`,
+    )
+  }
+  let body = result.stdout.trim()
   if (!body) {
     body = '- _(no commits listed — first release or empty range)_'
   }

@@ -53,6 +53,9 @@ jobs:
       - name: Install (refresh lockfile after version bump)
         run: pnpm install --no-frozen-lockfile
 
+      - name: Align package.json with Biome
+        run: pnpm exec biome format --write "packages/${{ inputs.package }}/package.json"
+
       - name: Verify and build (tuner-core)
         if: inputs.package == 'tuner-core'
         run: |

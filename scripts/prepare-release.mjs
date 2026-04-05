@@ -120,6 +120,14 @@ writeFileSync(changelogPath, changelog)
 pkg.version = nextVersion
 writeFileSync(pkgJsonPath, `${JSON.stringify(pkg, null, 2)}\n`)
 
+/** `JSON.stringify(..., null, 2)` often disagrees with Biome on short arrays; align when tooling exists. */
+const pkgJsonRel = path.relative(root, pkgJsonPath).split(path.sep).join('/')
+spawnSync('pnpm', ['exec', 'biome', 'format', '--write', pkgJsonRel], {
+  cwd: root,
+  encoding: 'utf8',
+  stdio: ['pipe', 'pipe', 'pipe'],
+})
+
 const releaseTitle = `${pkgName} ${nextVersion}`
 const releaseBody = `${changelogSection.trim()}\n\n_Previous version: \`${previousVersion}\`. Tag: \`${tagPrefix}-${nextVersion}\`._\n`
 writeFileSync(releaseNotesPath, releaseBody)

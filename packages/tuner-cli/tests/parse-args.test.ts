@@ -11,7 +11,7 @@ describe('parseArgs', () => {
     expect(a.rate).toBe(48000)
     expect(a.instrumentId).toBe('guitar')
     expect(a.tuningId).toBe('guitar-standard')
-    expect(a.detector).toBe('pyin')
+    expect(a.detector).toBe('yin')
     expect(a.centsThreshold).toBe(5)
     expect(a.color).toBe('auto')
     expect(a.style).toBeUndefined()

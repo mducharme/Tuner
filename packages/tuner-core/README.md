@@ -17,7 +17,7 @@ npm install tuner-core
 
 Different algorithms trade off **latency**, **stability**, **CPU cost**, and **robustness** to noise, vibrato, and false subharmonics. Shipping multiple implementations lets you **benchmark under real rooms and instruments**, A/B in your UI, and fall back when one misbehaves on a given platform.
 
-**Predictive YIN (pYIN)** is the **default** in `DEFAULT_TUNER_SETTINGS`: it combines YIN-style observations with a small HMM so the pitch track is steadier in practice for monophonic tuning. It is the one most likely to match what ships in end-user products; the others stay available for comparison and tuning.
+**YIN** is the **default** in `DEFAULT_TUNER_SETTINGS**: a direct **cumulative mean normalized difference (CMND)** detector with **`yinThreshold`** as the main knob. **Predictive YIN (pYIN)** uses the same observations with a small HMM for a steadier monophonic track—pick it when that trade-off suits your app. **MPM** and **autocorrelation** stay in the box for comparison and platform-specific behavior.
 
 ## Using `TunerSession` and reading results
 
@@ -34,7 +34,7 @@ import {
 } from 'tuner-core'
 
 const settings = mergeTunerSettings({
-  pitchDetector: 'pyin', // or 'yin' | 'mpm' | 'autocorrelation'
+  pitchDetector: 'yin', // or 'pyin' | 'mpm' | 'autocorrelation'
   medianWindowSize: 7,
   minConfidence: 0.28,
 })

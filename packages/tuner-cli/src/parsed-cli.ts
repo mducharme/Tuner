@@ -42,7 +42,7 @@ export function parsedCliToCliArgs(parsed: ParsedCli): CliArgs {
     instrumentId: 'guitar',
     tuningExplicit: false,
     tuningId: 'guitar-standard',
-    detector: 'pyin',
+    detector: 'yin',
     centsThreshold: 5,
     color: 'auto',
   }

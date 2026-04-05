@@ -7,9 +7,9 @@ import { YinDetector } from '../src/detectors/yin.js'
 import { mergeTunerSettings } from '../src/tuner-settings.js'
 
 describe('createPitchDetector', () => {
-  it('returns PyinDetector by default', () => {
+  it('returns YinDetector by default', () => {
     const d = createPitchDetector(mergeTunerSettings())
-    expect(d).toBeInstanceOf(PyinDetector)
+    expect(d).toBeInstanceOf(YinDetector)
   })
 
   it('returns YinDetector when configured', () => {

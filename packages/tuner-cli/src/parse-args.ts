@@ -110,7 +110,7 @@ export function createCliCommand(): Command {
     )
     .addOption(
       new Option('--detector <kind>', 'Pitch detector')
-        .default('pyin')
+        .default('yin')
         .argParser((v) => {
           if (!CLI_DETECTORS.includes(v as PitchDetectorKind)) {
             throw new InvalidArgumentError(

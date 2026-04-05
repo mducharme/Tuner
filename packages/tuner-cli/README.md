@@ -40,7 +40,7 @@ Point at a specific input and instrument:
 
 ```bash
 tuner --device 1 --instrument bass --tuning bass-standard
-tuner --rate 44100 --detector yin --verbose
+tuner --rate 44100 --detector pyin --verbose
 ```
 
 Use `-h` / `--help` for full CLI text and more examples.
@@ -58,7 +58,7 @@ Use `-h` / `--help` for full CLI text and more examples.
 | `--rate <hz>` | Sample rate (default `48000`) |
 | `--instrument <id>` | Instrument (default `guitar`) |
 | `--tuning <id>` | Tuning (default: first for that instrument) |
-| `--detector <kind>` | `pyin`, `yin`, `mpm`, `autocorrelation` (default `pyin`) |
+| `--detector <kind>` | `yin`, `pyin`, `mpm`, `autocorrelation` (default `yin`) |
 | `--cents-threshold <n>` | In-tune window for the string hint (default `5`) |
 | `--style <name>` | `standard`, `colors`, `ansi` |
 | `--color <mode>` | `auto`, `always`, `never` (honours `NO_COLOR` / `FORCE_COLOR` when `auto`) |

@@ -72,7 +72,7 @@ export const DEFAULT_TUNER_SETTINGS: TunerSettings = {
   audioFrameSamples: 4096,
   medianWindowSize: 7,
   minConfidence: 0.28,
-  pitchDetector: 'pyin',
+  pitchDetector: 'yin',
   detector: {
     minFrequency: 60,
     maxFrequency: 1400,

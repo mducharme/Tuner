@@ -55,7 +55,7 @@
     "prepublishOnly": "tsc && tsc --noEmit && publint --strict && attw --pack . --profile esm-only"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.17.4",
+    "@arethetypeswrong/cli": "^0.18.2",
     "@biomejs/biome": "^1.9.4",
     "@types/node": "^25.5.2",
     "@vitest/coverage-v8": "^4.1.2",

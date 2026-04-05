@@ -7,14 +7,7 @@ import {
 import { type PitchDetectorKind, findInstrument } from 'tuner-core'
 import type { DisplayStyle } from './display/styles.js'
 import { DISPLAY_STYLES } from './display/styles.js'
-import {
-  type CliArgs,
-  type ParsedCli,
-  type RunCliArgs,
-  parsedCliToCliArgs,
-} from './parsed-cli.js'
-
-export type { CliArgs } from './parsed-cli.js'
+import type { ParsedCli, RunCliArgs } from './parsed-cli.js'
 
 export const CLI_DETECTORS: readonly PitchDetectorKind[] = [
   'pyin',
@@ -243,15 +236,8 @@ function parseCliArgv(argv: string[]): ParsedCli {
   return parseWithCommander(argv, configureSilentCommander)
 }
 
-/** Parse argv for tests: no output, help → ParsedCli without printing. */
-export const parseCli = parseCliArgv
-
 /**
- * Parse argv for the real process entry. Suppresses Commander's help/error
- * writes so the app prints help and errors exactly once (see `index.ts`).
+ * Parse argv without writing to stdout/stderr (used by both `index.ts` and tests).
+ * Help is returned as `{ kind: 'help' }`; callers render help themselves.
  */
-export const parseCliRuntime = parseCliArgv
-
-export function parseArgs(argv: string[]): CliArgs {
-  return parsedCliToCliArgs(parseCli(argv))
-}
+export const parseCli = parseCliArgv

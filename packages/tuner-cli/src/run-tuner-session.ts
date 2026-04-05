@@ -125,10 +125,7 @@ export async function runTunerSession(args: RunCliArgs): Promise<void> {
 
   function reprintVerboseConfig(): void {
     if (!args.verbose) return
-    const tunerSettings = mergeTunerSettings({
-      pitchDetector: live.detector,
-      audioFrameSamples: 4096,
-    })
+    const tunerSettings = mergeTunerSettings({ pitchDetector: live.detector })
     const snapshot: RunCliArgs = {
       verbose: args.verbose,
       rate: live.rate,
@@ -174,10 +171,7 @@ export async function runTunerSession(args: RunCliArgs): Promise<void> {
     try {
       session?.stop()
       session = null
-      const tunerSettings = mergeTunerSettings({
-        pitchDetector: live.detector,
-        audioFrameSamples: 4096,
-      })
+      const tunerSettings = mergeTunerSettings({ pitchDetector: live.detector })
       const deviceOpt = parseDeviceArg(live.deviceRaw)
       const audio = new DecibriAudioProvider(
         live.rate,
@@ -227,7 +221,6 @@ export async function runTunerSession(args: RunCliArgs): Promise<void> {
 
   const tunerSettingsInitial = mergeTunerSettings({
     pitchDetector: live.detector,
-    audioFrameSamples: 4096,
   })
   const deviceOptInitial = parseDeviceArg(live.deviceRaw)
 
@@ -301,6 +294,21 @@ export async function runTunerSession(args: RunCliArgs): Promise<void> {
     session?.setTuning(tun)
     refreshBanner()
     reprintVerboseConfig()
+  }
+
+  const runStylePicker = async (): Promise<void> => {
+    const idx = await startSelectList({
+      title: 'Display style',
+      items: DISPLAY_STYLES,
+      label: (s) => menuLabelCurrent(displayStyleLabel(s), s === displayStyle),
+      stdout: process.stdout,
+    })
+    if (idx === null) return
+    const st = DISPLAY_STYLES[idx]
+    if (st) {
+      displayStyle = st
+      reprintVerboseConfig()
+    }
   }
 
   const runAdvancedMenu = async (): Promise<void> => {
@@ -415,19 +423,7 @@ export async function runTunerSession(args: RunCliArgs): Promise<void> {
           break
         }
         case 5: {
-          const j = await startSelectList({
-            title: 'Display style',
-            items: DISPLAY_STYLES,
-            label: (s) =>
-              menuLabelCurrent(displayStyleLabel(s), s === displayStyle),
-            stdout: process.stdout,
-          })
-          if (j === null) break
-          const st = DISPLAY_STYLES[j]
-          if (st) {
-            displayStyle = st
-            reprintVerboseConfig()
-          }
+          await runStylePicker()
           break
         }
         case 6: {
@@ -473,21 +469,7 @@ export async function runTunerSession(args: RunCliArgs): Promise<void> {
     }
 
     if (mk.ch === 's') {
-      runMenu(async () => {
-        const idx = await startSelectList({
-          title: 'Display style',
-          items: DISPLAY_STYLES,
-          label: (s) =>
-            menuLabelCurrent(displayStyleLabel(s), s === displayStyle),
-          stdout: process.stdout,
-        })
-        if (idx === null) return
-        const st = DISPLAY_STYLES[idx]
-        if (st) {
-          displayStyle = st
-          reprintVerboseConfig()
-        }
-      })
+      runMenu(runStylePicker)
       return
     }
 

@@ -75,6 +75,37 @@ const guitarStandard: Tuning = {
 }
 
 describe('TunerSession', () => {
+  it('reports isRunning and ignores redundant start/stop', async () => {
+    const audio = new MockAudio()
+    const session = new TunerSession(audio, new MockDetector(null))
+    expect(session.isRunning).toBe(false)
+    await session.start()
+    expect(session.isRunning).toBe(true)
+    await session.start()
+    expect(session.isRunning).toBe(true)
+    session.stop()
+    expect(session.isRunning).toBe(false)
+    session.stop()
+    expect(session.isRunning).toBe(false)
+  })
+
+  it('off() removes a listener', async () => {
+    const audio = new MockAudio()
+    const session = new TunerSession(audio, new MockDetector(440))
+    const results: unknown[] = []
+    const listener = (r: TunerResult) => {
+      results.push(r)
+    }
+    session.on('result', listener)
+    await session.start()
+    audio.emitFrame(new Float32Array(256))
+    expect(results).toHaveLength(1)
+    session.off('result', listener)
+    audio.emitFrame(new Float32Array(256))
+    expect(results).toHaveLength(1)
+    session.stop()
+  })
+
   it('emits started after start()', async () => {
     const audio = new MockAudio()
     const session = new TunerSession(audio, new MockDetector(null))
@@ -161,6 +192,39 @@ describe('TunerSession', () => {
     audio.emitFrame(new Float32Array(256))
     audio.emitFrame(new Float32Array(256))
     expect(freqs).toEqual([440, 440, 440])
+    session.stop()
+  })
+
+  it('median smoothing produces the median of the recent frequency window', async () => {
+    class SequenceDetector implements PitchDetector {
+      private i = 0
+      constructor(private readonly seq: number[]) {}
+      detect(): PitchDetection {
+        const f = this.seq[this.i] ?? this.seq[this.seq.length - 1] ?? 440
+        this.i++
+        return { frequency: f, confidence: 1 }
+      }
+    }
+
+    const audio = new MockAudio()
+    // Three frames: 100, 300, 200 Hz. With window=3:
+    //   frame 1 → median([100])        = 100
+    //   frame 2 → median([100, 300])   = 200  (even window: average)
+    //   frame 3 → median([100, 300, 200]) = 200 (odd: middle of sorted [100,200,300])
+    const session = new TunerSession(
+      audio,
+      new SequenceDetector([100, 300, 200]),
+      mergeTunerSettings({ medianWindowSize: 3, minConfidence: 0 }),
+    )
+    const freqs: number[] = []
+    session.on('result', (r) => {
+      freqs.push(r.frequency)
+    })
+    await session.start()
+    audio.emitFrame(new Float32Array(256))
+    audio.emitFrame(new Float32Array(256))
+    audio.emitFrame(new Float32Array(256))
+    expect(freqs).toEqual([100, 200, 200])
     session.stop()
   })
 

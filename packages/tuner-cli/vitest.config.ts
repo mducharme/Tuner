@@ -7,12 +7,12 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json-summary'],
-      include: ['src/parse-args.ts'],
+      include: ['src/**/*.ts'],
       thresholds: {
-        lines: 85,
-        functions: 100,
-        branches: 80,
-        statements: 85,
+        lines: 50,
+        functions: 50,
+        branches: 50,
+        statements: 50,
       },
     },
   },

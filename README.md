@@ -1,32 +1,27 @@
 # Tuner
 
-Open-source monorepo: **`tuner-core`** (pitch detection + session) and **`tuner-cli`** (terminal tuner).
+Open-source monorepo for instrument tuning: reusable pitch logic and a terminal chromatic tuner.
 
+## tuner-core
+
+[**`tuner-core`**](packages/tuner-core) is an ESM-only library (Node 20+) for pitch detection — YIN, pYIN, MPM, and autocorrelation — plus session/types you can embed in other apps or CLIs. See the [package README](packages/tuner-core/README.md) for API details.
+
+## tuner-cli
+
+[**`tuner-cli`**](packages/tuner-cli) is the terminal instrument tuner. It builds on `tuner-core` and uses [decibri](https://www.npmjs.com/package/decibri) / PortAudio for microphone capture. See the [package README](packages/tuner-cli/README.md) for install and usage.
 
 ## Scripts
 
-- `pnpm dev:cli` / `pnpm tuner` — CLI
+- `pnpm dev:cli` / `pnpm tuner` — Start tuning in your terminal
 - `pnpm build` / `pnpm test` / `pnpm test:coverage` / `pnpm typecheck` / `pnpm lint` — workspaces
 
-## Git hooks (Husky)
+## Changelog
 
-After `pnpm install`, hooks run via **`prepare`**:
-
-- **pre-commit** — `pnpm typecheck` (fast type safety before each commit)
-- **pre-push** — `pnpm lint` then `pnpm test` (full check before pushing)
-
-To skip once: `HUSKY=0 git commit` (macOS/Linux), `$env:HUSKY='0'; git commit` (PowerShell), or `set HUSKY=0 && git commit` (cmd).
+Release history: [CHANGELOG.md](./CHANGELOG.md).
 
 ## License
 
 MIT — see [LICENSE](./LICENSE).
-
-## Publishing `tuner-core`
-
-- [CHANGELOG.md](./CHANGELOG.md) — version history.
-- [packages/tuner-core/README.md](./packages/tuner-core/README.md) — npm usage (ESM-only).
-- CI runs **publint** + **Are The Types Wrong?** (`esm-only`) via `pnpm --filter tuner-core run package:assert`.
-- GitHub Actions: [`.github/workflows/publish.yml`](./.github/workflows/publish.yml) — run **Publish** with the package to ship (CalVer bump, changelog, GitHub Release, npm). Set the `NPM_TOKEN` secret. Repo: [github.com/mducharme/Tuner](https://github.com/mducharme/Tuner).
 
 ## Security
 

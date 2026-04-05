@@ -41,6 +41,19 @@ describe('midiToNote', () => {
     expect(midiToNote(69.4)).toBe('A')
     expect(midiToNote(69.6)).toBe('A#')
   })
+
+  it('returns C for MIDI 0', () => {
+    expect(midiToNote(0)).toBe('C')
+  })
+
+  it('returns G for MIDI 127', () => {
+    expect(midiToNote(127)).toBe('G')
+  })
+
+  it('falls back when rounded MIDI % 12 is negative (defensive)', () => {
+    // In JS, -1 % 12 === -1, so NOTE_NAMES[-1] is undefined and `??` applies.
+    expect(midiToNote(-1)).toBe('A')
+  })
 })
 
 describe('midiToOctave', () => {
@@ -61,6 +74,17 @@ describe('getCents', () => {
   it('is positive when sharp of nearest semitone', () => {
     const slightlySharp = 440 * 2 ** (3 / 1200)
     expect(getCents(slightlySharp)).toBeGreaterThan(0)
+  })
+
+  it('is negative when flat of nearest semitone', () => {
+    const flat = 440 * 2 ** (-3 / 1200)
+    expect(getCents(flat)).toBe(-3)
+  })
+
+  it('flips sign at the ±50 boundary: 50¢ sharp of A4 rounds to A#4 and reports −50¢', () => {
+    // 50 cents sharp of A4 is equidistant — Math.round(69.5) = 70 (A#4) in JS
+    const freq = 440 * 2 ** (50 / 1200)
+    expect(getCents(freq)).toBe(-50)
   })
 })
 

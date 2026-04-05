@@ -1,3 +1,4 @@
+import { Command } from 'commander'
 import { assert, describe, expect, it } from 'vitest'
 import { parseCli, parseDeviceArg } from '../src/parse-args.js'
 
@@ -124,6 +125,20 @@ describe('parseCli', () => {
     expect(() => parseCli(node(['--list-tunings', '--instrument']))).toThrow(
       'requires an instrument id',
     )
+  })
+
+  it('rethrows non-Commander errors from Commander#parse', () => {
+    const original = Command.prototype.parse
+    Command.prototype.parse = function parse(): never {
+      throw new Error('simulated parse failure')
+    }
+    try {
+      expect(() => parseCli(['node', 'tuner'])).toThrow(
+        'simulated parse failure',
+      )
+    } finally {
+      Command.prototype.parse = original
+    }
   })
 })
 

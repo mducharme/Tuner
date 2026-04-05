@@ -15,7 +15,7 @@
     "typecheck": "pnpm -r --filter \"./packages/*\" run typecheck"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
+    "@biomejs/biome": "^2.4.10",
     "husky": "^9.1.7",
     "typescript": "^6.0.2"
   },

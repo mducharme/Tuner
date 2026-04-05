@@ -96,6 +96,24 @@ describe('parseArgs', () => {
   it('rejects invalid rate', () => {
     expect(() => parseArgs(node(['--rate', '500']))).toThrow('Invalid --rate')
   })
+
+  it('rejects invalid --style', () => {
+    expect(() => parseArgs(node(['--style', 'fancy']))).toThrow(
+      'must be standard, colors, or ansi',
+    )
+  })
+
+  it('rejects invalid --cents-threshold', () => {
+    expect(() => parseArgs(node(['--cents-threshold', '-1']))).toThrow(
+      'Invalid --cents-threshold',
+    )
+  })
+
+  it('rejects --list-tunings when value looks like another flag', () => {
+    expect(() => parseArgs(node(['--list-tunings', '--instrument']))).toThrow(
+      'requires an instrument id',
+    )
+  })
 })
 
 describe('parseDeviceArg', () => {

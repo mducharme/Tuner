@@ -230,24 +230,27 @@ function parseWithCommander(
 
 const RAN_FROM_NODE = { from: 'node' as const }
 
-/** Parse argv for tests: no output, help → ParsedCli without printing. */
-export function parseCli(argv: string[]): ParsedCli {
-  return parseWithCommander(argv, (cmd) => {
-    cmd.exitOverride()
-    cmd.configureOutput({ writeOut: () => {}, writeErr: () => {} })
-  })
+function configureSilentCommander(cmd: Command): void {
+  cmd.exitOverride()
+  cmd.configureOutput({ writeOut: () => {}, writeErr: () => {} })
 }
+
+/**
+ * Parse argv without writing to stdout/stderr (tests + `index.ts` share this).
+ * Help is returned as `{ kind: 'help' }`; callers render help themselves.
+ */
+function parseCliArgv(argv: string[]): ParsedCli {
+  return parseWithCommander(argv, configureSilentCommander)
+}
+
+/** Parse argv for tests: no output, help → ParsedCli without printing. */
+export const parseCli = parseCliArgv
 
 /**
  * Parse argv for the real process entry. Suppresses Commander's help/error
  * writes so the app prints help and errors exactly once (see `index.ts`).
  */
-export function parseCliRuntime(argv: string[]): ParsedCli {
-  return parseWithCommander(argv, (cmd) => {
-    cmd.exitOverride()
-    cmd.configureOutput({ writeOut: () => {}, writeErr: () => {} })
-  })
-}
+export const parseCliRuntime = parseCliArgv
 
 export function parseArgs(argv: string[]): CliArgs {
   return parsedCliToCliArgs(parseCli(argv))

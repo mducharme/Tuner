@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "commander": "^14.0.3",
-    "decibri": "^1.0.0",
+    "decibri": "^3.3.2",
     "tuner-core": "^2026.4.2"
   },
   "devDependencies": {

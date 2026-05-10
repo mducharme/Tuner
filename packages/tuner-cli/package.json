@@ -52,7 +52,7 @@
     "@biomejs/biome": "^1.9.4",
     "@types/node": "^25.5.2",
     "@vitest/coverage-v8": "^4.1.2",
-    "publint": "^0.3.12",
+    "publint": "^0.3.20",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
     "vitest": "^4.1.2"
